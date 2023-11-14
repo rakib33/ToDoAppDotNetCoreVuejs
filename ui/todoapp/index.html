@@ -16,6 +16,26 @@
               this.notes = response.data;
             }
           )        
+        },
+        async addNewNotes(){
+          var description = document.getElementById("newNotes").value;
+          const formData = new FormData();
+          formData.append("newNotes",description);
+
+          axios.post(API_URL+"api/ToDo/AddNotes",formData).then(
+            (response)=>{
+              this.refreshedData();
+              alert(response.data);
+            }
+          )
+        },
+        async deletNewNotes(id){
+          axios.delete(API_URL+"api/ToDo/DeleteNotes?id="+id).then(
+            (response)=>{
+              this.refreshedData();
+              alert(response.data);
+            }
+          )
         }
     },mounted:function(){
       console.log('mount is called');
@@ -25,8 +45,11 @@
 </script>
 
 <div id="app">
-  <h2>ToDo App</h2>    
+  <h2>ToDo App</h2>  
+  <input id="newNotes"/> &nbsp;
+   <button @click="addNewNotes()">Add Notes</button>  
   <p v-for="note in notes">
    <b>* {{note.description}}</b>
+   <button @click="deletNewNotes(note.id)">Delete Notes</button> 
   </p>
  </div>
